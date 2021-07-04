@@ -50,20 +50,21 @@ class Os_model extends CI_Model
             }
         }
 
-        $this->db->select($fields . ',clientes.nomeCliente, clientes.celular as celular_cliente, usuarios.nome, garantias.*');
+        $this->db->select($fields . ',clientes.nomeCliente, clientes.celular as celular_cliente, usuarios.nome, garantias.*, status.nome as statusNome, status.cor as statusCor, status.id as statusId');
         $this->db->from($table);
         $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
         $this->db->join('usuarios', 'usuarios.idUsuarios = os.usuarios_id');
         $this->db->join('garantias', 'garantias.idGarantias = os.garantias_id', 'left');
         $this->db->join('produtos_os', 'produtos_os.os_id = os.idOs', 'left');
         $this->db->join('servicos_os', 'servicos_os.os_id = os.idOs', 'left');
+		$this->db->join('status', 'status.id = os.status_id', 'left');
 
         // condicionais da pesquisa
 
         // condicional de status
-        if (array_key_exists('status', $where)) {
-            $this->db->where_in('status', $where['status']);
-        }
+        //if (array_key_exists('status', $where)) {
+        //    $this->db->where_in('status', $where['status']);
+       // }
 
         // condicional de clientes
         if (array_key_exists('pesquisa', $where)) {
@@ -118,7 +119,13 @@ class Os_model extends CI_Model
 
         return $this->db->get()->row();
     }
-
+	public function getAllStatus()
+    {
+        $sql = "SELECT * FROM status";
+		return $this->db->query($sql)->result();
+		
+    }
+	
     public function getProdutos($id = null)
     {
         $this->db->select('produtos_os.*, produtos.*');
@@ -182,14 +189,25 @@ class Os_model extends CI_Model
 
     public function autoCompleteProduto($q)
     {
+		$this->db->select('produtos.*, produtos_fornecedores.*, fornecedores.*');
+		$this->db->limit(5);
+        $this->db->like('codDeBarra', $q);
+        $this->db->or_like('descricao', $q);
+        $this->db->from('produtos');
+        $this->db->join('produtos_fornecedores', 'produtos.idProdutos = produtos_fornecedores.idProduto', 'left');
+		$this->db->join('fornecedores', 'produtos_fornecedores.idFornecedor = fornecedores.idFornecedores', 'left');
+        $query = $this->db->get();
+
+		/*
         $this->db->select('*');
         $this->db->limit(5);
         $this->db->like('codDeBarra', $q);
         $this->db->or_like('descricao', $q);
         $query = $this->db->get('produtos');
+		*/
         if ($query->num_rows() > 0) {
             foreach ($query->result_array() as $row) {
-                $row_set[] = ['label' => $row['descricao'] . ' | Preço: R$ ' . $row['precoVenda'] . ' | Estoque: ' . $row['estoque'], 'estoque' => $row['estoque'], 'id' => $row['idProdutos'], 'preco' => $row['precoVenda']];
+                $row_set[] = ['label' => $row['descricao'] . ' (' . $row['nomeFornecedor'] . ')', 'estoque' => $row['estoque'], 'idFornecedor' => $row['idFornecedor'], 'id' => $row['idProdutos'], 'unidade' => $row['unidade'], 'preco' => $row['precoVenda']];
             }
             echo json_encode($row_set);
         }

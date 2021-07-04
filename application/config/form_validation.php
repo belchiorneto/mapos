@@ -56,6 +56,61 @@ $config = [
             'rules' => 'trim',
         ]
     ],
+	'fornecedores' => [
+        [
+            'field' => 'nomeFornecedor',
+            'label' => 'Nome',
+            'rules' => 'required|trim',
+        ],
+        [
+            'field' => 'documento',
+            'label' => 'CPF/CNPJ',
+            'rules' => 'trim|verific_cpf_cnpj|unique[fornecedores.documento.' . $this->uri->segment(3) . '.idFornecedores]',
+            'errors' => [
+                'verific_cpf_cnpj' => "O campo %s não é um CPF ou CNPJ válido."
+            ],
+        ],
+        [
+            'field' => 'telefone',
+            'label' => 'Telefone',
+            'rules' => 'trim',
+        ],
+        [
+            'field' => 'email',
+            'label' => 'Email',
+            'rules' => 'trim|valid_email',
+        ],
+        [
+            'field' => 'rua',
+            'label' => 'Rua',
+            'rules' => 'trim',
+        ],
+        [
+            'field' => 'numero',
+            'label' => 'Número',
+            'rules' => 'trim',
+        ],
+        [
+            'field' => 'bairro',
+            'label' => 'Bairro',
+            'rules' => 'trim',
+        ],
+        [
+            'field' => 'cidade',
+            'label' => 'Cidade',
+            'rules' => 'trim',
+        ],
+        [
+            'field' => 'estado',
+            'label' => 'Estado',
+            'rules' => 'trim',
+        ],
+        [
+            'field' => 'cep',
+            'label' => 'CEP',
+            'rules' => 'trim',
+        ]
+    ],
     'servicos' => [
         [
             'field' => 'nome',
@@ -85,11 +140,6 @@ $config = [
             'rules' => 'required|trim',
         ],
         [
-            'field' => 'precoCompra',
-            'label' => 'Preço de Compra',
-            'rules' => 'required|trim',
-        ],
-        [
             'field' => 'precoVenda',
             'label' => 'Preço de Venda',
             'rules' => 'required|trim',
@@ -104,6 +154,70 @@ $config = [
             'label' => 'Estoque Minimo',
             'rules' => 'trim',
         ]
+    ],
+	'insumos' => [
+        [
+            'field' => 'descricao',
+            'label' => '',
+            'rules' => 'required|trim',
+        ],
+        [
+            'field' => 'unidade',
+            'label' => 'Unidade',
+            'rules' => 'required|trim',
+        ]
+       
+    ],
+	'adicionar_fornecedor_insumo' => [
+        [
+            'field' => 'idInsumo',
+            'label' => 'idInsumo',
+            'rules' => 'trim|required|numeric',
+        ],
+        [
+            'field' => 'preco',
+            'label' => 'preco',
+            'rules' => 'trim|required|numeric|greater_than[-1]',
+        ],
+        [
+            'field' => 'idFornecedor',
+            'label' => 'idFornecedor',
+            'rules' => 'trim|required|numeric',
+        ],
+    ],
+	'adicionar_fornecedor_produto' => [
+        [
+            'field' => 'idProduto',
+            'label' => 'idProduto',
+            'rules' => 'trim|required|numeric',
+        ],
+        [
+            'field' => 'preco',
+            'label' => 'preco',
+            'rules' => 'trim|required|numeric|greater_than[-1]',
+        ],
+        [
+            'field' => 'idFornecedor',
+            'label' => 'idFornecedor',
+            'rules' => 'trim|required|numeric',
+        ],
+    ],
+	'adicionar_insumo_produto' => [
+        [
+            'field' => 'idInsumo',
+            'label' => 'idInsumo',
+            'rules' => 'trim|required|numeric',
+        ],
+        [
+            'field' => 'preco_insumo',
+            'label' => 'preco_insumo',
+            'rules' => 'trim|required|numeric|greater_than[-1]',
+        ],
+        [
+            'field' => 'idProduto',
+            'label' => 'idProduto',
+            'rules' => 'trim|required|numeric',
+        ],
     ],
     'usuarios' => [
         [

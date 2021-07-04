@@ -64,11 +64,13 @@ class Os extends MY_Controller
             'os.*,
             COALESCE((SELECT SUM(produtos_os.preco * produtos_os.quantidade ) FROM produtos_os WHERE produtos_os.os_id = os.idOs), 0) totalProdutos,
             COALESCE((SELECT SUM(servicos_os.preco * servicos_os.quantidade ) FROM servicos_os WHERE servicos_os.os_id = os.idOs), 0) totalServicos',
+			
             $where_array,
             $this->data['configuration']['per_page'],
             $this->uri->segment(3)
         );
-
+		
+		$this->data['allStatus'] = $this->os_model->getAllStatus();
         $this->data['texto_de_notificacao'] = $this->data['configuration']['notifica_whats'];
         $this->data['emitente'] = $this->mapos_model->getEmitente();
         $this->data['view'] = 'os/os';
@@ -77,13 +79,14 @@ class Os extends MY_Controller
 
     public function adicionar()
     {
-        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'aOs')) {
+		if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'aOs')) {
             $this->session->set_flashdata('error', 'Você não tem permissão para adicionar O.S.');
             redirect(base_url());
         }
 
         $this->load->library('form_validation');
         $this->data['custom_error'] = '';
+		
 
         if ($this->form_validation->run('os') == false) {
             $this->data['custom_error'] = (validation_errors() ? true : false);
@@ -120,7 +123,7 @@ class Os extends MY_Controller
                 'garantias_id' => $termoGarantiaId,
                 'descricaoProduto' => set_value('descricaoProduto'),
                 'defeito' => set_value('defeito'),
-                'status' => set_value('status'),
+                'status_id' => set_value('status'),
                 'observacoes' => set_value('observacoes'),
                 'laudoTecnico' => set_value('laudoTecnico'),
                 'faturado' => 0,
@@ -167,7 +170,7 @@ class Os extends MY_Controller
                 $this->data['custom_error'] = '<div class="alert">Ocorreu um erro.</div>';
             }
         }
-
+		$this->data['allStatus'] = $this->os_model->getAllStatus();
         $this->data['view'] = 'os/adicionarOs';
         return $this->layout();
     }
@@ -219,7 +222,7 @@ class Os extends MY_Controller
                 'garantias_id' => $termoGarantiaId,
                 'descricaoProduto' => $this->input->post('descricaoProduto'),
                 'defeito' => $this->input->post('defeito'),
-                'status' => $this->input->post('status'),
+                'status_id' => $this->input->post('status'),
                 'observacoes' => $this->input->post('observacoes'),
                 'laudoTecnico' => $this->input->post('laudoTecnico'),
                 'usuarios_id' => $this->input->post('usuarios_id'),
@@ -284,7 +287,8 @@ class Os extends MY_Controller
 
         $this->load->model('mapos_model');
         $this->data['emitente'] = $this->mapos_model->getEmitente();
-
+		
+		$this->data['allStatus'] = $this->os_model->getAllStatus();
         $this->data['view'] = 'os/editarOs';
         return $this->layout();
     }
@@ -574,13 +578,19 @@ class Os extends MY_Controller
         }
 
         $preco = $this->input->post('preco');
-        $quantidade = $this->input->post('quantidade');
+        $largura = str_replace(",",".",$this->input->post('largura'));
+		$altura = str_replace(",",".",$this->input->post('altura')); 
+		$quantidade = $this->input->post('quantidade');
         $subtotal = $preco * $quantidade;
         $produto = $this->input->post('idProduto');
+		$fornecedor = $this->input->post('idFornecedor');
         $data = [
             'quantidade' => $quantidade,
+			'largura' => $largura,
+			'altura' => $altura,
             'subTotal' => $subtotal,
             'produtos_id' => $produto,
+			'fornecedores_id' => $fornecedor,
             'preco' => $preco,
             'os_id' => $this->input->post('idOsProduto'),
         ];

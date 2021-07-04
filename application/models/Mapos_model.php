@@ -148,11 +148,12 @@ class Mapos_model extends CI_Model
         return $this->db->get()->result();
     }
 
-    public function calendario($start, $end, $status = null)
+    public function calendario($start, $end, $status_id = null)
     {
         $this->db->select(
             'os.*,
             clientes.nomeCliente,
+			status.nome as statusNome, status.id as statusId, status.cor as statusCor,
             COALESCE((SELECT SUM(produtos_os.preco * produtos_os.quantidade ) FROM produtos_os WHERE produtos_os.os_id = os.idOs), 0) totalProdutos,
             COALESCE((SELECT SUM(servicos_os.preco * servicos_os.quantidade ) FROM servicos_os WHERE servicos_os.os_id = os.idOs), 0) totalServicos'
         );
@@ -160,15 +161,23 @@ class Mapos_model extends CI_Model
         $this->db->join('clientes', 'clientes.idClientes = os.clientes_id');
         $this->db->join('produtos_os', 'produtos_os.os_id = os.idOs', 'left');
         $this->db->join('servicos_os', 'servicos_os.os_id = os.idOs', 'left');
+		$this->db->join('status', 'status.id = os.status_id', 'left');
         $this->db->where('os.dataFinal >=', $start);
         $this->db->where('os.dataFinal <=', $end);
         $this->db->group_by('os.idOs');
 
-        if (!empty($status)) {
-            $this->db->where('os.status', $status);
+        if (!empty($status_id)) {
+            $this->db->where('os.status_id', $status_id);
         }
-
+		
         return $this->db->get()->result();
+    }
+	
+	public function getAllStatus()
+    {
+        $sql = "SELECT * FROM status";
+		return $this->db->query($sql)->result();
+		
     }
 
     public function getProdutosMinimo()

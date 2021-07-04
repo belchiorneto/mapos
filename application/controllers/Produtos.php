@@ -128,7 +128,9 @@ class Produtos extends MY_Controller
             }
         }
 
-        $this->data['result'] = $this->produtos_model->getById($this->uri->segment(3));
+        $this->data['fornecedores'] = $this->produtos_model->getFornecedores($this->uri->segment(3));
+		$this->data['insumos'] = $this->produtos_model->getInsumos($this->uri->segment(3));
+		$this->data['result'] = $this->produtos_model->getById($this->uri->segment(3));
 
         $this->data['view'] = 'produtos/editarProduto';
         return $this->layout();
@@ -203,6 +205,95 @@ class Produtos extends MY_Controller
             redirect(site_url('produtos/visualizar/') . $idProduto);
         } else {
             $this->data['custom_error'] = '<div class="alert">Ocorreu um erro.</div>';
+        }
+    }
+	public function autoCompleteFornecedor()
+    {
+        if (isset($_GET['term'])) {
+            $q = strtolower($_GET['term']);
+            $this->produtos_model->autoCompleteFornecedor($q);
+        }
+    }
+	public function autoCompleteInsumo()
+    {
+        if (isset($_GET['term'])) {
+            $q = strtolower($_GET['term']);
+            $this->produtos_model->autoCompleteInsumo($q);
+        }
+    }
+
+	public function adicionarFornecedor()
+    {
+        $this->load->library('form_validation');
+
+        if ($this->form_validation->run('adicionar_fornecedor_produto') === false) {
+            $errors = validation_errors();
+
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(400)
+                ->set_output(json_encode($errors));
+        }
+
+        $preco = $this->input->post('preco');
+        $idproduto = $this->input->post('idProduto');
+        $data = [
+            'idProduto' => $idproduto,
+            'valorCompra' => $preco,
+            'idFornecedor' => $this->input->post('idFornecedor'),
+        ];
+
+        if ($this->produtos_model->add('produtos_fornecedores', $data) == true) {
+            $this->load->model('produtos_model');
+
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(200)
+                ->set_output(json_encode(['result' => true]));
+        } else {
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(500)
+                ->set_output(json_encode(['result' => false]));
+        }
+    }
+	
+	public function adicionarInsumo()
+    {
+        $this->load->library('form_validation');
+
+        if ($this->form_validation->run('adicionar_insumo_produto') === false) {
+            $errors = validation_errors();
+
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(400)
+                ->set_output(json_encode($errors));
+        }
+
+        $preco = $this->input->post('preco_insumo');
+        $idproduto = $this->input->post('idProduto');
+		$idFornecedor = $this->input->post('idFornecedorInsumo');
+        $data = [
+            'idProduto' => $idproduto,
+            'valorCompra' => $preco,
+            'idFornecedor' => $idFornecedor,
+			'quantidade' => $this->input->post('quantidade_insumo'),
+			'idInsumo' => $this->input->post('idInsumo'),
+        ];
+
+        if ($this->produtos_model->add('produtos_insumos', $data) == true) {
+            $this->load->model('produtos_model');
+
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(200)
+                ->set_output(json_encode(['result' => true]));
+        } else {
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(500)
+                ->set_output(json_encode(['result' => false]));
         }
     }
 }

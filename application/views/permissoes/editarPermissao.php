@@ -88,6 +88,48 @@
                                     </td>
                                 </tr>
                                 <tr>
+                                    <td>
+                                        <label>
+                                            <input <?php if (isset($permissoes['vFornecedor'])) {
+    if ($permissoes['vFornecedor'] == '1') {
+        echo 'checked';
+    }
+}?> name="vCliente" class="marcar" type="checkbox" value="1" />
+                                            <span class="lbl"> Visualizar Fornecedor</span>
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <label>
+                                            <input <?php if (isset($permissoes['aFornecedor'])) {
+    if ($permissoes['aFornecedor'] == '1') {
+        echo 'checked';
+    }
+}?> name="aFornecedor" class="marcar" type="checkbox" value="1" />
+                                            <span class="lbl"> Adicionar Fornecedor</span>
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <label>
+                                            <input <?php if (isset($permissoes['eFornecedor'])) {
+    if ($permissoes['eFornecedor'] == '1') {
+        echo 'checked';
+    }
+}?> name="eFornecedor" class="marcar" type="checkbox" value="1" />
+                                            <span class="lbl"> Editar Fornecedor</span>
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <label>
+                                            <input <?php if (isset($permissoes['dFornecedor'])) {
+    if ($permissoes['dFornecedor'] == '1') {
+        echo 'checked';
+    }
+}?> name="dFornecedor" class="marcar" type="checkbox" value="1" />
+                                            <span class="lbl"> Excluir Fornecedor</span>
+                                        </label>
+                                    </td>
+                                </tr>
+                                <tr>
                                     <td colspan="4"></td>
                                 </tr>
                                 <tr>
@@ -129,6 +171,51 @@
     }
 }?> name="dProduto" class="marcar" type="checkbox" value="1" />
                                             <span class="lbl"> Excluir Produto</span>
+                                        </label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4"></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label>
+                                            <input <?php if (isset($permissoes['vInsumo'])) {
+    if ($permissoes['vInsumo'] == '1') {
+        echo 'checked';
+    }
+}?> name="vInsumo" class="marcar" type="checkbox" value="1" />
+                                            <span class="lbl"> Visualizar Insumo</span>
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <label>
+                                            <input <?php if (isset($permissoes['aInsumo'])) {
+    if ($permissoes['aInsumo'] == '1') {
+        echo 'checked';
+    }
+}?> name="aProduto" class="marcar" type="checkbox" value="1" />
+                                            <span class="lbl"> Adicionar Insumo</span>
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <label>
+                                            <input <?php if (isset($permissoes['eInsumo'])) {
+    if ($permissoes['eInsumo'] == '1') {
+        echo 'checked';
+    }
+}?> name="eInsumo" class="marcar" type="checkbox" value="1" />
+                                            <span class="lbl"> Editar Insumo</span>
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <label>
+                                            <input <?php if (isset($permissoes['dInsumo'])) {
+    if ($permissoes['dInsumo'] == '1') {
+        echo 'checked';
+    }
+}?> name="dInsumo" class="marcar" type="checkbox" value="1" />
+                                            <span class="lbl"> Excluir Insumo</span>
                                         </label>
                                     </td>
                                 </tr>
@@ -457,8 +544,18 @@
     if ($permissoes['rCliente'] == '1') {
         echo 'checked';
     }
-}?> name="rCliente" class="marcar" type="checkbox" value="1" />
+}?> name="rFornecedor" class="marcar" type="checkbox" value="1" />
                                             <span class="lbl"> Relatório Cliente</span>
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <label>
+                                            <input <?php if (isset($permissoes['rFornecedor'])) {
+    if ($permissoes['rFornecedor'] == '1') {
+        echo 'checked';
+    }
+}?> name="rFornecedor" class="marcar" type="checkbox" value="1" />
+                                            <span class="lbl"> Relatório Fornecedor</span>
                                         </label>
                                     </td>
                                     <td>
@@ -493,6 +590,16 @@
                                     </td>
                                 </tr>
                                 <tr>
+                                	<td>
+                                        <label>
+                                            <input <?php if (isset($permissoes['rInsumo'])) {
+    if ($permissoes['rInsumo'] == '1') {
+        echo 'checked';
+    }
+}?> name="rProduto" class="marcar" type="checkbox" value="1" />
+                                            <span class="lbl"> Relatório Insumo</span>
+                                        </label>
+                                    </td>
                                     <td>
                                         <label>
                                             <input <?php if (isset($permissoes['rVenda'])) {
@@ -511,6 +618,16 @@
     }
 }?> name="rFinanceiro" class="marcar" type="checkbox" value="1" />
                                             <span class="lbl"> Relatório Financeiro</span>
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <label>
+                                            <input <?php if (isset($permissoes['rFaturamento'])) {
+    if ($permissoes['rFaturamento'] == '1') {
+        echo 'checked';
+    }
+}?> name="rFaturamento" class="marcar" type="checkbox" value="1" />
+                                            <span class="lbl"> Relatório Faturamento</span>
                                         </label>
                                     </td>
                                     <td colspan="2"></td>

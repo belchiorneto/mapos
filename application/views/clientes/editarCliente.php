@@ -96,7 +96,7 @@
                             </div>
                         </div>
                         <div class="control-group">
-                            <label class="control-label">Tipo de Cliente</label>
+                            <label class="control-label">Fornecedor</label>
                             <div class="controls">
                                 <label for="fornecedor" class="btn btn-default" style="margin-top: 5px;">Fornecedor
                                     <input type="checkbox" id="fornecedor" name="fornecedor" class="badgebox"

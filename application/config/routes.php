@@ -41,6 +41,10 @@
 */
 
 $route['default_controller'] = "mapos";
+
+
+//$route['default_controller'] = "User";
+
 $route['404_override'] = '';
 
 

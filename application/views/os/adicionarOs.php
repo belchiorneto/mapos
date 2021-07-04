@@ -56,13 +56,11 @@
                                         <div class="span3">
                                             <label for="status">Status<span class="required">*</span></label>
                                             <select class="span12" name="status" id="status" value="">
-                                                <option value="Orçamento">Orçamento</option>
-                                                <option value="Aberto">Aberto</option>
-                                                <option value="Em Andamento">Em Andamento</option>
-                                                <option value="Finalizado">Finalizado</option>
-                                                <option value="Cancelado">Cancelado</option>
-                                                <option value="Aguardando Peças">Aguardando Peças</option>
-                                                <option value="Aprovado">Aprovado</option>
+                                                <?php
+													foreach ($allStatus as $s) {
+														echo '<option value="'.$s->id.'">'.$s->nome.'</option>';													
+													}
+												?>
                                             </select>
                                         </div>
                                         <div class="span3">
@@ -88,24 +86,28 @@
                                         </label>
                                         <textarea class="span12 editor" name="descricaoProduto" id="descricaoProduto" cols="30" rows="5"></textarea>
                                     </div>
+                                    <!--
                                     <div class="span6" style="padding: 1%; margin-left: 0">
                                         <label for="defeito">
                                             <h4>Defeito</h4>
                                         </label>
                                         <textarea class="span12 editor" name="defeito" id="defeito" cols="30" rows="5"></textarea>
                                     </div>
+                                    -->
                                     <div class="span6" style="padding: 1%; margin-left: 0">
                                         <label for="observacoes">
                                             <h4>Observações</h4>
                                         </label>
                                         <textarea class="span12 editor" name="observacoes" id="observacoes" cols="30" rows="5"></textarea>
                                     </div>
+                                    <!--
                                     <div class="span6" style="padding: 1%; margin-left: 0">
                                         <label for="laudoTecnico">
                                             <h4>Laudo Técnico</h4>
                                         </label>
                                         <textarea class="span12 editor" name="laudoTecnico" id="laudoTecnico" cols="30" rows="5"></textarea>
                                     </div>
+                                    -->
                                     <div class="span12" style="padding: 1%; margin-left: 0">
                                         <div class="span6 offset3" style="text-align: center">
                                             <button class="btn btn-success" id="btnContinuar"><i class="fas fa-plus"></i> Continuar</button>

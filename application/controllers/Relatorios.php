@@ -867,7 +867,174 @@ class Relatorios extends MY_Controller
         $html = $this->load->view('relatorios/imprimir/imprimirVendas', $data, true);
         pdf_create($html, 'relatorio_vendas' . date('d/m/y'), true);
     }
+	
+	// relatorios personalizados de faturamento
+	
+	public function faturamento()
+    {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'rFaturamento')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para gerar relatórios de faturamentos.');
+            redirect(base_url());
+        }
 
+        $this->data['view'] = 'relatorios/rel_faturamento';
+        return $this->layout();
+    }
+
+    public function faturamentoRapid()
+    {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'rFaturamento')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para gerar relatórios de faturamentos.');
+            redirect(base_url());
+        }
+
+        $format = $this->input->get('format');
+        $isXls = $format === 'xls';
+        $faturamento = $this->Relatorios_model->faturamentoRapid($isXls);
+        $totalFaturamento = 0;
+        foreach ($faturamento as $fat) {
+            $totalFaturamento += $isXls
+                ? floatval($fat['valorTotal'])
+                : floatval($fat->valorTotal);
+        }
+
+        if ($format == 'xls') {
+            $faturamentoFormatadas = array_map(function ($item) {
+                return [
+                    '#' => $item['idVendas'],
+                    'cliente' => $item['nomeCliente'],
+                    'vendedor' => $item['nome'],
+                    'data' => $item['dataVenda'],
+                    'total' => $item['valorTotal'] ?: 0,
+                ];
+            }, $vendas);
+
+            $cabecalho = [
+                '#' => 'string',
+                'Cliente' => 'string',
+                'Vendedor' => 'string',
+                'Data' => 'DD-MM-YYYY',
+                'Total' => 'price',
+            ];
+
+            $writer = new XLSXWriter();
+            $writer->writeSheetRow(null, []);
+            $writer->writeSheetHeader('Sheet1', $cabecalho);
+            foreach ($vendasFormatadas as $venda) {
+                $writer->writeSheetRow('Sheet1', $venda);
+            }
+            $writer->writeSheetRow(null, []);
+            $writer->writeSheetRow(null, []);
+            $writer->writeSheetRow(null, []);
+            $writer->writeSheetRow('Sheet1', []);
+            $writer->writeSheetRow('Sheet1', [
+                null,
+                null,
+                null,
+                null,
+                $totalVendas,
+            ]);
+
+            $arquivo = $writer->writeToString();
+            $this->load->helper('download');
+            force_download('relatorio_faturamento.xlsx', $arquivo);
+
+            return;
+        }
+
+        $data['faturamento'] = $faturamento;
+        $data['total_faturamento'] = $totalFaturamento;
+        $data['emitente'] = $this->Mapos_model->getEmitente();
+        $data['title'] = 'Relatório de Faturamento Rápido';
+        $data['topo'] = $this->load->view('relatorios/imprimir/imprimirTopo', $data, true);
+		$this->load->helper('mpdf');
+        /*
+		foreach ($faturamento as $f) {
+			var_dump($f);
+			echo $f['data'];
+			echo '<hr>';
+		}
+		*/
+		$html = $this->load->view('relatorios/imprimir/imprimirFaturamento', $data, true);
+        pdf_create($html, 'relatorio_faturamento' . date('d/m/y'), true);
+    }
+
+    public function faturamentoCustom()
+    {
+        if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'rVenda')) {
+            $this->session->set_flashdata('error', 'Você não tem permissão para gerar relatórios de vendas.');
+            redirect(base_url());
+        }
+        $dataInicial = $this->input->get('dataInicial');
+        $dataFinal = $this->input->get('dataFinal');
+        $cliente = $this->input->get('cliente');
+        $responsavel = $this->input->get('responsavel');
+        $format = $this->input->get('format');
+
+        $isXls = $format === 'xls';
+        $vendas = $this->Relatorios_model->vendasCustom($dataInicial, $dataFinal, $cliente, $responsavel, $isXls);
+        $totalVendas = 0;
+        foreach ($vendas as $venda) {
+            $totalVendas += $isXls
+                ? floatval($venda['valorTotal'])
+                : floatval($venda->valorTotal);
+        }
+
+        if ($format == 'xls') {
+            $vendasFormatadas = array_map(function ($item) {
+                return [
+                    '#' => $item['idVendas'],
+                    'cliente' => $item['nomeCliente'],
+                    'vendedor' => $item['nome'],
+                    'data' => $item['dataVenda'],
+                    'total' => $item['valorTotal'] ?: 0,
+                ];
+            }, $vendas);
+
+            $cabecalho = [
+                '#' => 'string',
+                'Cliente' => 'string',
+                'Vendedor' => 'string',
+                'Data' => 'DD-MM-YYYY',
+                'Total' => 'price',
+            ];
+
+            $writer = new XLSXWriter();
+            $writer->writeSheetHeader('Sheet1', $cabecalho);
+            foreach ($vendasFormatadas as $venda) {
+                $writer->writeSheetRow('Sheet1', $venda);
+            }
+            $writer->writeSheetRow(null, []);
+            $writer->writeSheetRow(null, []);
+            $writer->writeSheetRow(null, []);
+            $writer->writeSheetRow('Sheet1', []);
+            $writer->writeSheetRow('Sheet1', [
+                null,
+                null,
+                null,
+                null,
+                $totalVendas,
+            ]);
+
+            $arquivo = $writer->writeToString();
+            $this->load->helper('download');
+            force_download('relatorio_vendas.xlsx', $arquivo);
+
+            return;
+        }
+
+        $data['vendas'] = $vendas;
+        $data['total_vendas'] = $totalVendas;
+        $data['emitente'] = $this->Mapos_model->getEmitente();
+        $data['title'] = 'Relatório de Vendas Customizado';
+        $data['topo'] = $this->load->view('relatorios/imprimir/imprimirTopo', $data, true);
+
+        $this->load->helper('mpdf');
+        $html = $this->load->view('relatorios/imprimir/imprimirVendas', $data, true);
+        pdf_create($html, 'relatorio_vendas' . date('d/m/y'), true);
+    }
+	
+	
     public function receitasBrutasMei()
     {
         if (!$this->permission->checkPermission($this->session->userdata('permissao'), 'rFinanceiro')) {

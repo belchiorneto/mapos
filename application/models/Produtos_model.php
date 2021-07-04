@@ -80,4 +80,56 @@ class Produtos_model extends CI_Model
         $sql = "UPDATE produtos set estoque = estoque $operacao ? WHERE idProdutos = ?";
         return $this->db->query($sql, [$quantidade, $produto]);
     }
+	
+	public function autoCompleteFornecedor($q)
+    {
+        $this->db->select('*');
+        $this->db->limit(5);
+        $this->db->like('nomeFornecedor', $q);
+        $query = $this->db->get('fornecedores');
+        if ($query->num_rows() > 0) {
+            foreach ($query->result_array() as $row) {
+                $row_set[] = ['label' => $row['nomeFornecedor'], 'id' => $row['idFornecedores']];
+            }
+            echo json_encode($row_set);
+        }
+    }
+	
+	public function autoCompleteInsumo($q)
+    {
+        $this->db->select('insumos.*, insumos_fornecedores.*, fornecedores.*');
+		$this->db->limit(5);
+        $this->db->like('descricao', $q);
+        $this->db->from('insumos');
+        $this->db->join('insumos_fornecedores', 'insumos.idInsumos = insumos_fornecedores.idInsumo', 'left');
+		$this->db->join('fornecedores', 'insumos_fornecedores.idFornecedor = fornecedores.idFornecedores', 'left');
+        $query = $this->db->get();
+	   if ($query->num_rows() > 0) {
+            foreach ($query->result_array() as $row) {
+                $row_set[] = ['label' => $row['descricao'] . '('.$row['nomeFornecedor'].')', 'preco' => $row['valorCompra'], 'idFornecedor' => $row['idFornecedor'], 'id' => $row['idInsumos']];
+            }
+            echo json_encode($row_set);
+        }
+    }
+	
+	public function getFornecedores($id = null)
+    {
+        $this->db->select('produtos_fornecedores.*, fornecedores.*');
+        $this->db->from('produtos_fornecedores');
+        $this->db->join('fornecedores', 'fornecedores.idFornecedores = produtos_fornecedores.idFornecedor');
+        $this->db->where('idProduto', $id);
+
+        return $this->db->get()->result();
+    }
+	public function getInsumos($id = null)
+    {
+        $this->db->select('produtos_insumos.*, insumos.*');
+        $this->db->from('produtos_insumos');
+        $this->db->join('insumos', 'insumos.idInsumos = produtos_insumos.idInsumo');
+        $this->db->where('idProduto', $id);
+
+        return $this->db->get()->result();
+    }
+	
+	
 }

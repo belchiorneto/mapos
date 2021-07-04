@@ -7,15 +7,31 @@
         <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vCliente')) { ?>
             <li class="<?php if (isset($menuClientes)) {
     echo 'active';
-}; ?>"><a href="<?= site_url('clientes') ?>"><i class="fas fa-users"></i> <span>Cliente / Fornecedor</span></a></li>
+}; ?>"><a href="<?= site_url('clientes') ?>"><i class="fas fa-users"></i> <span>Cliente</span></a></li>
+			
+            <li class="<?php if (isset($menuFornecedores)) {
+    echo 'active';
+}; ?>"><a href="<?= site_url('fornecedores') ?>"><i class="fas fa-users"></i> <span>Fornecedor</span></a></li>
             <?php
         } ?>
-        <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vProduto')) { ?>
+        <?php 
+			if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vProduto')) { 
+		?>
             <li class="<?php if (isset($menuProdutos)) {
             echo 'active';
         }; ?>"><a href="<?= site_url('produtos') ?>"><i class="fas fa-shopping-bag"></i> <span>Produtos</span></a></li>
-            <?php
-        } ?>
+		<?php
+	        }
+        ?>
+        <?php 
+			if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vInsumo')) { 
+		?>
+            <li class="<?php if (isset($menuInsumos)) {
+            echo 'active';
+        }; ?>"><a href="<?= site_url('insumos') ?>"><i class="fas fa-shopping-bag"></i> <span>Insumos</span></a></li>
+		<?php
+	        }
+        ?>
         <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'vServico')) { ?>
             <li class="<?php if (isset($menuServicos)) {
             echo 'active';
@@ -86,6 +102,10 @@
                     } ?>
                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'rVenda')) { ?>
                         <li><a href="<?= site_url('relatorios/vendas') ?>">Vendas</a></li>
+                        <?php
+                    } ?>
+                    <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'rFaturamento')) { ?>
+                        <li><a href="<?= site_url('relatorios/faturamento') ?>">Faturamento</a></li>
                         <?php
                     } ?>
                     <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'rGarantia')) { ?>

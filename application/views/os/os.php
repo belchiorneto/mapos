@@ -2,8 +2,8 @@
 <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/table-custom.css" />
 <script type="text/javascript" src="<?php echo base_url() ?>assets/js/jquery-ui/js/jquery-ui-1.9.2.custom.js"></script>
 <script src="<?php echo base_url() ?>assets/js/sweetalert2.all.min.js"></script>
-
 <div class="span12" style="margin-left: 0">
+    
     <form method="get" action="<?php echo base_url(); ?>index.php/os/gerenciar">
         <?php if ($this->permission->checkPermission($this->session->userdata('permissao'), 'aOs')) { ?>
             <div class="span3">
@@ -16,17 +16,13 @@
             <input type="text" name="pesquisa" id="pesquisa" placeholder="Nome do cliente a pesquisar" class="span12" value="">
         </div>
         <div class="span2">
-            <select name="status[]" id="status" class="span12" multiple>
+        	            <select name="status[]" id="status" class="span12" multiple>
                 <option value="">Selecione status</option>
-                <option value="Aberto">Aberto</option>
-                <option value="Faturado">Faturado</option>
-                <option value="Negociação">Negociação</option>
-                <option value="Em Andamento">Em Andamento</option>
-                <option value="Orçamento">Orçamento</option>
-                <option value="Finalizado">Finalizado</option>
-                <option value="Cancelado">Cancelado</option>
-                <option value="Aguardando Peças">Aguardando Peças</option>
-                <option value="Aprovado">Aprovado</option>
+                <?php
+					foreach ($allStatus as $s) {
+						echo '<option value="'.$s->id.'">'.$s->nome.'</option>';													
+					}
+				?>
             </select>
 
         </div>
@@ -58,11 +54,11 @@
                         <th>Responsável</th>
                         <th>Data Inicial</th>
                         <th>Data Final</th>
-                        <th>Venc. Garantia</th>
-                        <th>Valor Total</th>
+                        <!-- <th>Venc. Garantia</th>-->
+                        <th>Valor Total</th> 
                         <th>Valor Total (Faturado)</th>
                         <th>Status</th>
-                        <th>T. Garantia</th>
+                        <!-- <th>T. Garantia</th> -->
                         <th>Ações</th>
                     </tr>
                 </thead>
@@ -82,44 +78,8 @@
                         } else {
                             $dataFinal = "";
                         }
-                        if ($this->input->get('pesquisa') === null && is_array(json_decode($configuration['os_status_list']))) {
-                            if (in_array($r->status, json_decode($configuration['os_status_list'])) != true) {
-                                continue;
-                            }
-                        }
-
-                        switch ($r->status) {
-                            case 'Aberto':
-                                $cor = '#00cd00';
-                                break;
-                            case 'Em Andamento':
-                                $cor = '#436eee';
-                                break;
-                            case 'Orçamento':
-                                $cor = '#CDB380';
-                                break;
-                            case 'Negociação':
-                                $cor = '#AEB404';
-                                break;
-                            case 'Cancelado':
-                                $cor = '#CD0000';
-                                break;
-                            case 'Finalizado':
-                                $cor = '#256';
-                                break;
-                            case 'Faturado':
-                                $cor = '#B266FF';
-                                break;
-                            case 'Aguardando Peças':
-                                $cor = '#FF7F00';
-                                break;
-                            case 'Aprovado':
-                                $cor = '#808080';
-                                break;
-                            default:
-                                $cor = '#E0E4CC';
-                                break;
-                        }
+                     
+                     
                         $vencGarantia = '';
 
                         if ($r->garantia && is_numeric($r->garantia)) {
@@ -132,11 +92,11 @@
                         echo '<td>' . $r->nome . '</td>';
                         echo '<td>' . $dataInicial . '</td>';
                         echo '<td>' . $dataFinal . '</td>';
-                        echo '<td>' . $vencGarantia . '</td>';
+                        //echo '<td>' . $vencGarantia . '</td>';
                         echo '<td>R$ ' . number_format($r->totalProdutos + $r->totalServicos, 2, ',', '.') . '</td>';
                         echo '<td>R$ ' . number_format($r->valorTotal, 2, ',', '.') . '</td>';
-                        echo '<td><span class="badge" style="background-color: ' . $cor . '; border-color: ' . $cor . '">' . $r->status . '</span> </td>';
-                        echo '<td>' . $r->refGarantia . '</td>';
+                        echo '<td><span class="badge" style="background-color: ' . $r->statusCor . '; border-color: ' . $r->statusCor . '">' . $r->statusNome . '</span> </td>';
+                        //echo '<td>' . $r->refGarantia . '</td>';
                         echo '<td>';
 
                         $editavel = $this->os_model->isEditable($r->idOs);

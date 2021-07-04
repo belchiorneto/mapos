@@ -207,6 +207,8 @@
                                 <thead>
                                 <tr>
                                     <th>Produto</th>
+                                    <th>Alt.</th>
+                                    <th>Larg.</th>
                                     <th>Quantidade</th>
                                     <th>Preço unit.</th>
                                     <th>Sub-total</th>
@@ -218,7 +220,14 @@
                                 foreach ($produtos as $p) {
                                     echo '<tr>';
                                     echo '<td>' . $p->descricao . '</td>';
-                                    echo '<td>' . $p->quantidade . '</td>';
+                                    if ($p->largura > 0) { 
+										echo '<td>' . $p->largura . '</td>';
+										echo '<td>' . $p->altura . '</td>';
+									}else{
+										echo '<td>não se aplica</td>';
+										echo '<td>não se aplica</td>';
+									}
+									echo '<td>' . $p->quantidade . ' ' . $p->unidade . '</td>';
                                     echo '<td>' . $p->preco ?: $p->precoVenda . '</td>';
                                     echo '<td>R$ ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
                                     echo '</tr>';

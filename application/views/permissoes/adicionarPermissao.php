@@ -28,13 +28,13 @@
                         <div class="accordion-group widget-box">
                             <div class="accordion-heading">
                                 <div class="widget-title">
-                                    <a data-parent="#collapse-group" href="#collapseGOne" data-toggle="collapse">
+                                    <a data-parent="#collapse-group" href="#collapseGZero" data-toggle="collapse">
                                         <span class="icon"><i class="fas fa-key"></i></span>
                                         <h5>Clientes</h5>
                                     </a>
                                 </div>
                             </div>
-                            <div class="collapse in accordion-body" id="collapseGOne">
+                            <div class="collapse in accordion-body" id="collapseGZero">
                                 <div class="widget-content">
                                     <table class="table table-bordered">
                                         <tbody>
@@ -69,16 +69,61 @@
                                 </div>
                             </div>
                         </div>
+                     
                         <div class="accordion-group widget-box">
                             <div class="accordion-heading">
                                 <div class="widget-title">
                                     <a data-parent="#collapse-group" href="#collapseGTwo" data-toggle="collapse">
                                         <span class="icon"><i class="fas fa-key"></i></span>
-                                        <h5>Produtos</h5>
+                                        <h5>Fornecedores</h5>
                                     </a>
                                 </div>
                             </div>
                             <div class="collapse accordion-body" id="collapseGTwo">
+                                <div class="widget-content">
+                                    <table class="table table-bordered">
+                                        <tbody>
+                                        <tr>
+                                            <td>
+                                                <label>
+                                                    <input name="vFornecedor" class="marcar" type="checkbox" checked="checked" value="1" />
+                                                    <span class="lbl"> Visualizar Fornecedor</span>
+                                                </label>
+                                            </td>
+                                            <td>
+                                                <label>
+                                                    <input name="aFornecedor" class="marcar" type="checkbox" value="1" />
+                                                    <span class="lbl"> Adicionar Fornecedor</span>
+                                                </label>
+                                            </td>
+                                            <td>
+                                                <label>
+                                                    <input name="eFornecedor" class="marcar" type="checkbox" value="1" />
+                                                    <span class="lbl"> Editar Fornecedor</span>
+                                                </label>
+                                            </td>
+                                            <td>
+                                                <label>
+                                                    <input name="dFornecedor" class="marcar" type="checkbox" value="1" />
+                                                    <span class="lbl"> Excluir Fornecedor</span>
+                                                </label>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-group widget-box">
+                            <div class="accordion-heading">
+                                <div class="widget-title">
+                                    <a data-parent="#collapse-group" href="#collapseGTwo2" data-toggle="collapse">
+                                        <span class="icon"><i class="fas fa-key"></i></span>
+                                        <h5>Produtos</h5>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="collapse accordion-body" id="collapseGTwo2">
                                 <div class="widget-content">
                                     <table class="table table-bordered">
                                         <tbody>
@@ -105,6 +150,50 @@
                                                 <label>
                                                     <input name="dProduto" class="marcar" type="checkbox" value="1" />
                                                     <span class="lbl"> Excluir Produto</span>
+                                                </label>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-group widget-box">
+                            <div class="accordion-heading">
+                                <div class="widget-title">
+                                    <a data-parent="#collapse-group" href="#collapseGTwo22" data-toggle="collapse">
+                                        <span class="icon"><i class="fas fa-key"></i></span>
+                                        <h5>Insumos</h5>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="collapse accordion-body" id="collapseGTwo22">
+                                <div class="widget-content">
+                                    <table class="table table-bordered">
+                                        <tbody>
+                                        <tr>
+                                            <td>
+                                                <label>
+                                                    <input name="vInsumo" class="marcar" type="checkbox" checked="checked" value="1" />
+                                                    <span class="lbl"> Visualizar Insumo</span>
+                                                </label>
+                                            </td>
+                                            <td>
+                                                <label>
+                                                    <input name="aInsumo" class="marcar" type="checkbox" value="1" />
+                                                    <span class="lbl"> Adicionar Insumo</span>
+                                                </label>
+                                            </td>
+                                            <td>
+                                                <label>
+                                                    <input name="eInsumo" class="marcar" type="checkbox" value="1" />
+                                                    <span class="lbl"> Editar Insumo</span>
+                                                </label>
+                                            </td>
+                                            <td>
+                                                <label>
+                                                    <input name="dInsumo" class="marcar" type="checkbox" value="1" />
+                                                    <span class="lbl"> Excluir Insumo</span>
                                                 </label>
                                             </td>
                                         </tr>
@@ -469,6 +558,12 @@
                                             </td>
                                             <td>
                                                 <label>
+                                                    <input name="rFornecedor" class="marcar" type="checkbox" value="1" />
+                                                    <span class="lbl"> Relatório Fornecedor</span>
+                                                </label>
+                                            </td>
+                                            <td>
+                                                <label>
                                                     <input name="rServico" class="marcar" type="checkbox" value="1" />
                                                     <span class="lbl"> Relatório Serviço</span>
                                                 </label>
@@ -485,6 +580,12 @@
                                                     <span class="lbl"> Relatório Produto</span>
                                                 </label>
                                             </td>
+                                            <td>
+                                                <label>
+                                                    <input name="rInsumo" class="marcar" type="checkbox" value="1" />
+                                                    <span class="lbl"> Relatório Insumos</span>
+                                                </label>
+                                            </td>
                                         </tr>
                                         <tr>
                                             <td>
@@ -497,6 +598,12 @@
                                                 <label>
                                                     <input name="rFinanceiro" class="marcar" type="checkbox" value="1" />
                                                     <span class="lbl"> Relatório Financeiro</span>
+                                                </label>
+                                            </td>
+                                            <td>
+                                                <label>
+                                                    <input name="rFaturamento" class="marcar" type="checkbox" value="1" />
+                                                    <span class="lbl"> Relatório Faturamento</span>
                                                 </label>
                                             </td>
                                         </tr>

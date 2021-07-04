@@ -64,11 +64,21 @@ class Permissoes extends MY_Controller
                 'eCliente' => $this->input->post('eCliente'),
                 'dCliente' => $this->input->post('dCliente'),
                 'vCliente' => $this->input->post('vCliente'),
+				
+				'aFornecedor' => $this->input->post('aFornecedor'),
+                'eFornecedor' => $this->input->post('eFornecedor'),
+                'dFornecedor' => $this->input->post('dFornecedor'),
+                'vFornecedor' => $this->input->post('vFornecedor'),
 
                 'aProduto' => $this->input->post('aProduto'),
                 'eProduto' => $this->input->post('eProduto'),
                 'dProduto' => $this->input->post('dProduto'),
                 'vProduto' => $this->input->post('vProduto'),
+				
+				'aInsumo' => $this->input->post('aInsumo'),
+                'eInsumo' => $this->input->post('eInsumo'),
+                'dInsumo' => $this->input->post('dInsumo'),
+                'vInsumo' => $this->input->post('vInsumo'),
 
                 'aServico' => $this->input->post('aServico'),
                 'eServico' => $this->input->post('eServico'),
@@ -114,10 +124,13 @@ class Permissoes extends MY_Controller
                 'cSistema' => $this->input->post('cSistema'),
 
                 'rCliente' => $this->input->post('rCliente'),
+				'rFornecedor' => $this->input->post('rFornecedor'),
                 'rProduto' => $this->input->post('rProduto'),
+				'rInsumo' => $this->input->post('rInsumo'),
                 'rServico' => $this->input->post('rServico'),
                 'rOs' => $this->input->post('rOs'),
                 'rVenda' => $this->input->post('rVenda'),
+				'rFaturamento' => $this->input->post('rFaturamento'),
                 'rFinanceiro' => $this->input->post('rFinanceiro'),
 
                 'aCobranca' => $this->input->post('aCobranca'),
@@ -164,6 +177,11 @@ class Permissoes extends MY_Controller
                 'eCliente' => $this->input->post('eCliente'),
                 'dCliente' => $this->input->post('dCliente'),
                 'vCliente' => $this->input->post('vCliente'),
+				
+				'aFornecedor' => $this->input->post('aFornecedor'),
+                'eFornecedor' => $this->input->post('eFornecedor'),
+                'dFornecedor' => $this->input->post('dFornecedor'),
+                'vFornecedor' => $this->input->post('vFornecedor'),
 
                 'aProduto' => $this->input->post('aProduto'),
                 'eProduto' => $this->input->post('eProduto'),
@@ -214,6 +232,7 @@ class Permissoes extends MY_Controller
                 'cSistema' => $this->input->post('cSistema'),
 
                 'rCliente' => $this->input->post('rCliente'),
+				'rFornecedor' => $this->input->post('rFornecedor'),
                 'rProduto' => $this->input->post('rProduto'),
                 'rServico' => $this->input->post('rServico'),
                 'rOs' => $this->input->post('rOs'),

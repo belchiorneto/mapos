@@ -79,15 +79,11 @@
                         <form method="post">
                             <select class="span12" name="statusOsGet" id="statusOsGet" value="">
                                 <option value="">Todos os Status</option>
-                                <option value="Aberto">Aberto</option>
-                                <option value="Faturado">Faturado</option>
-                                <option value="Negociação">Negociação</option>
-                                <option value="Orçamento">Orçamento</option>
-                                <option value="Em Andamento">Em Andamento</option>
-                                <option value="Finalizado">Finalizado</option>
-                                <option value="Cancelado">Cancelado</option>
-                                <option value="Aguardando Peças">Aguardando Peças</option>
-                                <option value="Aprovado">Aprovado</option>
+                                <?php
+									foreach ($allStatus as $s) {
+										echo '<option value="'.$s->id.'">'.$s->nome.'</option>';													
+									}
+								?>
                             </select>
                             <button type="button" class="btn-xs" id="btn-calendar">Pesquisar</button>
                         </form>
@@ -834,7 +830,7 @@
                 method: 'GET',
                 extraParams: function() { // a function that returns an object
                     return {
-                        status: $("#statusOsGet").val(),
+                        status_id: $("#statusOsGet").val(),
                     };
                 },
                 failure: function() {

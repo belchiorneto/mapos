@@ -400,6 +400,76 @@ class Relatorios_model extends CI_Model
 
         return $result->result();
     }
+	// relatorios de faturamento
+	public function faturamentoRapid($array = false)
+    {
+        $dataInicial = date('Y-m-01');
+		$this->db->select('sum(vendas.valorTotal) as totalVendas, dataVenda as data');
+        $this->db->from('vendas');
+		$this->db->where('dataVenda >=', $dataInicial);
+        $this->db->group_by('vendas.dataVenda');
+		$this->db->order_by('vendas.dataVenda', 'ASC');
+		
+
+        $resultVendas = $this->db->get();
+		
+		$this->db->select('sum(os.valorTotal) as totalOs, dataInicial as data');
+        $this->db->from('os');
+		$this->db->where('dataInicial >=', $dataInicial);
+		$this->db->where('status_id =', 10);
+        $this->db->group_by('os.dataInicial');
+		$this->db->order_by('os.dataInicial', 'ASC');
+		
+        $resultOs = $this->db->get();
+		$vendas = $resultVendas->result();
+		$os = $resultOs->result();
+		$count = 0;
+		foreach ($vendas as $venda) {
+			$arrayResult[$count]['data'] = $venda->data;
+			$arrayResult[$count]['totalVendas'] = $venda->totalVendas;
+			$count++;
+		}
+		$count = 0;
+		foreach ($os as $o) {
+			$arrayResult[$count]['totalOs'] = $o->totalOs;
+			$count++;
+		}
+		//$arrayResult = array_merge($resultVendas->result(), $resultOs->result());
+        
+		return $arrayResult;
+    }
+
+    public function faturamentoCustom($dataInicial = null, $dataFinal = null, $cliente = null, $responsavel = null, $array = false)
+    {
+        $whereData = "";
+        $whereCliente = "";
+        $whereResponsavel = "";
+        $whereStatus = "";
+        if ($dataInicial != null) {
+            $whereData .= "AND dataVenda >= " . $this->db->escape($dataInicial);
+        }
+        if ($dataFinal != null) {
+            $whereData .= "AND dataVenda <= " . $this->db->escape($dataFinal);
+        }
+        if ($cliente != null) {
+            $whereCliente = "AND clientes_id = " . $this->db->escape($cliente);
+        }
+        if ($responsavel != null) {
+            $whereResponsavel = "AND usuarios_id = " . $this->db->escape($responsavel);
+        }
+
+        $query = "SELECT vendas.*,clientes.nomeCliente, usuarios.nome FROM vendas
+        LEFT JOIN clientes ON vendas.clientes_id = clientes.idClientes
+        LEFT JOIN usuarios ON vendas.usuarios_id = usuarios.idUsuarios
+        WHERE idVendas != 0 $whereData $whereCliente $whereResponsavel ORDER BY vendas.idVendas";
+
+        $result = $this->db->query($query);
+        if ($array) {
+            return $result->result_array();
+        }
+
+        return $result->result();
+    }
 
     public function receitasBrutasRapid()
     {

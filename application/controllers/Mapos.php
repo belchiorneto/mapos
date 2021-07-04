@@ -19,7 +19,8 @@ class Mapos extends MY_Controller
 
     public function index()
     {
-        $this->data['ordens'] = $this->mapos_model->getOsAbertas();
+        $this->data['allStatus'] = $this->mapos_model->getAllStatus();
+		$this->data['ordens'] = $this->mapos_model->getOsAbertas();
         $this->data['ordens1'] = $this->mapos_model->getOsAguardandoPecas();
         $this->data['ordens_andamento'] = $this->mapos_model->getOsAndamento();
         $this->data['produtos'] = $this->mapos_model->getProdutosMinimo();
@@ -430,57 +431,29 @@ class Mapos extends MY_Controller
             redirect(base_url());
         }
         $this->load->model('os_model');
-        $status = $this->input->get('status') ?: null;
+        $status_id = $this->input->get('status_id') ?: null;
         $start = $this->input->get('start') ?: null;
         $end = $this->input->get('end') ?: null;
 
         $allOs = $this->mapos_model->calendario(
             $start,
             $end,
-            $status
+            $status_id
         );
         $events = array_map(function ($os) {
-            switch ($os->status) {
-                case 'Aberto':
-                    $cor = '#00cd00';
-                    break;
-                case 'Negociação':
-                    $cor = '#AEB404';
-                    break;
-                case 'Em Andamento':
-                    $cor = '#436eee';
-                    break;
-                case 'Orçamento':
-                    $cor = '#CDB380';
-                    break;
-                case 'Cancelado':
-                    $cor = '#CD0000';
-                    break;
-                case 'Finalizado':
-                    $cor = '#256';
-                    break;
-                case 'Faturado':
-                    $cor = '#B266FF';
-                    break;
-                case 'Aguardando Peças':
-                    $cor = '#FF7F00';
-                    break;
-                default:
-                    $cor = '#E0E4CC';
-                    break;
-            }
+           
             return [
                 'title' => "OS: {$os->idOs}, Cliente: {$os->nomeCliente}",
                 'start' => $os->dataFinal,
                 'end' => $os->dataFinal,
-                'color' => $cor,
+                'color' => $os->statusCor,
                 'extendedProps' => [
                     'id' => $os->idOs,
                     'cliente' => '<b>Cliente:</b> ' . $os->nomeCliente,
                     'dataInicial' => '<b>Data Inicial:</b> ' . $os->dataInicial,
                     'dataFinal' => '<b>Data Final:</b> ' . $os->dataFinal,
                     'garantia' => '<b>Garantia:</b> ' . $os->garantia,
-                    'status' => '<b>Status da OS:</b> ' . $os->status,
+                    'status' => '<b>Status da OS:</b> ' . $os->statusNome,
                     'description' => '<b>Descrição/Produto:</b> ' . $os->descricaoProduto,
                     'defeito' => '<b>Defeito:</b> ' . $os->defeito,
                     'observacoes' => '<b>Observações:</b> ' . $os->observacoes,

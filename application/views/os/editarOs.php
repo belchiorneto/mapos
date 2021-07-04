@@ -80,7 +80,7 @@
                                             <input id="valorTotal" type="hidden" name="valorTotal" value="" />
                                         </div>
                                         <div class="span6">
-                                            <label for="tecnico">Técnico / Responsável<span class="required">*</span></label>
+                                            <label for="tecnico">Responsável<span class="required">*</span></label>
                                             <input id="tecnico" class="span12" type="text" name="tecnico" value="<?php echo $result->nome ?>" />
                                             <input id="usuarios_id" class="span12" type="hidden" name="usuarios_id" value="<?php echo $result->usuarios_id ?>" />
                                         </div>
@@ -89,42 +89,13 @@
                                         <div class="span3">
                                             <label for="status">Status<span class="required">*</span></label>
                                             <select class="span12" name="status" id="status" value="">
-                                                <option <?php if ($result->status == 'Orçamento') {
-                        echo 'selected';
-                    } ?> value="Orçamento">Orçamento
-                                                </option>
-                                                <option <?php if ($result->status == 'Aberto') {
-                        echo 'selected';
-                    } ?> value="Aberto">Aberto
-                                                </option>
-                                                <option <?php if ($result->status == 'Faturado') {
-                        echo 'selected';
-                    } ?> value="Faturado">Faturado
-                                                </option>
-                                                <option <?php if ($result->status == 'Negociação') {
-                        echo 'selected';
-                    } ?> value="Negociação">Negociação
-                                                </option>
-                                                <option <?php if ($result->status == 'Em Andamento') {
-                        echo 'selected';
-                    } ?> value="Em Andamento">Em Andamento
-                                                </option>
-                                                <option <?php if ($result->status == 'Finalizado') {
-                        echo 'selected';
-                    } ?> value="Finalizado">Finalizado
-                                                </option>
-                                                <option <?php if ($result->status == 'Cancelado') {
-                        echo 'selected';
-                    } ?> value="Cancelado">Cancelado
-                                                </option>
-                                                <option <?php if ($result->status == 'Aguardando Peças') {
-                        echo 'selected';
-                    } ?> value="Aguardando Peças">Aguardando Peças
-                                                </option>
-                                                <option <?php if ($result->status == 'Aprovado') {
-                        echo 'selected';
-                    } ?> value="Aprovado">Aprovado
-                                                </option>
+                                            <?php
+											foreach ($allStatus as $s) {
+											if($result->status_id == $s->id){
+											echo '<option selected="selected" value="'.$s->id.'">'.$s->nome.'</option>';													
+											}else{ echo '<option value="'.$s->id.'">'.$s->nome.'</option>';									}
+											}
+												?>
                                             </select>
                                         </div>
                                         <div class="span3">
@@ -150,24 +121,32 @@
                                         </label>
                                         <textarea class="span12 editor" name="descricaoProduto" id="descricaoProduto" cols="30" rows="5"><?php echo $result->descricaoProduto ?></textarea>
                                     </div>
+                                    <!-- 
+                                    Desabilitando aqui por falta de utilidade nessa versão do sistema
                                     <div class="span6" style="padding: 1%; margin-left: 0">
                                         <label for="defeito">
                                             <h4>Defeito</h4>
                                         </label>
-                                        <textarea class="span12 editor" name="defeito" id="defeito" cols="30" rows="5"><?php echo $result->defeito ?></textarea>
+                                        <textarea class="span12 editor" name="defeito" id="defeito" cols="30" rows="5"><?php // echo $result->defeito ?></textarea>
                                     </div>
+                                    -->
                                     <div class="span6" style="padding: 1%; margin-left: 0">
                                         <label for="observacoes">
                                             <h4>Observações</h4>
                                         </label>
                                         <textarea class="span12 editor" name="observacoes" id="observacoes" cols="30" rows="5"><?php echo $result->observacoes ?></textarea>
                                     </div>
+                                    <!--
+                                    Desabilitando aqui por falta de utilidade nessa versão do sistema
                                     <div class="span6" style="padding: 1%; margin-left: 0">
                                         <label for="laudoTecnico">
                                             <h4>Laudo Técnico</h4>
                                         </label>
-                                        <textarea class="span12 editor" name="laudoTecnico" id="laudoTecnico" cols="30" rows="5"><?php echo $result->laudoTecnico ?></textarea>
+                                        <textarea class="span12 editor" name="laudoTecnico" id="laudoTecnico" cols="30" rows="5">
+										<?php // echo $result->laudoTecnico ?>
+                                        </textarea>
                                     </div>
+                                    -->
                                     <div class="span12" style="padding: 1%; margin-left: 0">
                                         <div class="span6 offset3" style="text-align: center">
                                             <?php if ($result->faturado == 0) { ?>
@@ -188,26 +167,45 @@
                         <div class="tab-pane" id="tab2">
                             <div class="span12 well" style="padding: 1%; margin-left: 0">
                                 <form id="formProdutos" action="<?php echo base_url() ?>index.php/os/adicionarProduto" method="post">
-                                    <div class="span6">
+                                    <div style="width:300px; float:left" class="">
                                         <input type="hidden" name="idProduto" id="idProduto" />
+                                        <input type="hidden" name="idFornecedor" id="idFornecedor" />
                                         <input type="hidden" name="idOsProduto" id="idOsProduto" value="<?php echo $result->idOs; ?>" />
                                         <input type="hidden" name="estoque" id="estoque" value="" />
                                         <label for="">Produto</label>
-                                        <input type="text" class="span12" name="produto" id="produto" placeholder="Digite o nome do produto" />
+                                        <input type="text" style="width: 90%;" name="produto" id="produto" placeholder="Digite o nome do produto" />
                                     </div>
-                                    <div class="span2">
+                                    <div style="width:70px; float:left" class="">
                                         <label for="">Preço</label>
-                                        <input type="text" placeholder="Preço" id="preco" name="preco" class="span12 money" data-affixes-stay="true" data-thousands="" data-decimal="." />
+                                        <input style="width: 70%;" type="text" placeholder="Preço" id="preco" name="preco" class="money" data-affixes-stay="true" data-thousands="" data-decimal="."/>
                                     </div>
-                                    <div class="span2">
+                                    <div style="width:70px; float:left; display:none" id="div_largura" class="">
+                                        <label for="">Largura</label>
+                                        <input type="text" placeholder="Largura" id="largura" name="largura" data-affixes-stay="true" data-thousands="" data-decimal="." style="width: 70%;" />
+                                    </div>
+
+                                    <div style="width:70px; float:left; display:none"  id="div_altura" class="" >
+                                        <label for="">Altura</label>
+                                        <input type="text" placeholder="Altura" id="altura" name="altura" class="span1" data-affixes-stay="true" data-thousands="" data-decimal="." style="width: 70%;" />
+                                    </div>
+                                    <div id="div_medida" class="" style="width:70px; float:left; display:none">
+                                        <label for="medida">Medida</label>
+                                        <select placeholder="Medida" id="medida" name="medida" class="" style="width: 70%;"> 
+                                        <option value="1">m</option>
+                                        <option value="0.1">cm</option>
+                                        <option value="0.01">mm</option>
+                                        </select>
+                                        
+                                    </div>
+                                    <div style="width:70px; float:left; display:block" class="">
                                         <label for="">Quantidade</label>
-                                        <input type="text" placeholder="Quantidade" id="quantidade" name="quantidade" class="span12" />
+                                        <input type="text" placeholder="Quantidade" id="quantidade" name="quantidade" class="" style="width: 70%;" />
                                     </div>
-                                    <div class="span2">
+                                       <div class="span2">
                                         <label for="">&nbsp;</label>
-                                        <button class="btn btn-success span12" id="btnAdicionarProduto"><i class="fas fa-plus"></i> Adicionar
-                                        </button>
+                                        <button class="btn btn-success span12"><i class="fas fa-plus"></i> Adicionar</button>
                                     </div>
+                                   
                                 </form>
                             </div>
                             <div class="widget-box" id="divProdutos">
@@ -216,6 +214,8 @@
                                         <thead>
                                             <tr>
                                                 <th>Produto</th>
+                                                <th width="8%">Alt</th>
+                                                <th width="8%">Lrg</th>
                                                 <th width="8%">Quantidade</th>
                                                 <th width="10%">Preço unit.</th>
                                                 <th width="6%">Ações</th>
@@ -229,7 +229,9 @@
                                                 $total = $total + $p->subTotal;
                                                 echo '<tr>';
                                                 echo '<td>' . $p->descricao . '</td>';
-                                                echo '<td><div align="center">' . $p->quantidade . '</td>';
+                                                echo '<td><div align="center">' . $p->largura . '</td>';
+												echo '<td><div align="center">' . $p->altura . '</td>';
+												echo '<td><div align="center">' . $p->quantidade . '</td>';
                                                 echo '<td><div align="center">R$: ' . ($p->preco ?: $p->precoVenda)  . '</td>';
                                                 echo '<td><div align="center"><a href="" idAcao="' . $p->idProdutos_os . '" prodAcao="' . $p->idProdutos . '" quantAcao="' . $p->quantidade . '" title="Excluir Produto" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a></td>';
                                                 echo '<td><div align="center">R$: ' . number_format($p->subTotal, 2, ',', '.') . '</td>';
@@ -498,7 +500,6 @@
                             <option value="Boleto">Boleto</option>
                             <option value="Depósito">Depósito</option>
                             <option value="Pix">Pix</option>
-                            <option value="Cheque">Cheque</option>
                         </select>
                     </div>
                 </div>
@@ -655,18 +656,44 @@
         });
 
         $("#produto").autocomplete({
-            source: "<?php echo base_url(); ?>index.php/os/autoCompleteProduto",
+			source: "<?php echo base_url(); ?>index.php/os/autoCompleteProduto",
             minLength: 2,
             select: function(event, ui) {
-                $("#codDeBarra").val(ui.item.codbar);
+              $("#codDeBarra").val(ui.item.codbar);
                 $("#idProduto").val(ui.item.id);
+				$("#idFornecedor").val(ui.item.idFornecedor);
                 $("#estoque").val(ui.item.estoque);
                 $("#preco").val(ui.item.preco);
                 $("#quantidade").focus();
+				if(ui.item.unidade === "M²"){
+					$("#div_medida").show();
+					$("#div_largura").show();
+					$("#div_altura").show();
+				}
+				
             }
         });
 
-        $("#servico").autocomplete({
+        $( "#altura" ).keyup(function() {
+			var largura = $("#largura").val().replace(/,/g,'.');
+			var altura = $("#altura").val().replace(/,/g,'.');
+			var metros = largura * altura * $("#medida").val();
+			$("#quantidade").val(metros);
+		});
+		$( "#largura" ).keyup(function() {
+			var largura = $("#largura").val().replace(/,/g,'.');
+			var altura = $("#altura").val().replace(/,/g,'.');
+			var metros = largura * altura * $("#medida").val();
+			$("#quantidade").val(metros);
+		});
+		$( "#medida" ).change(function() {
+			var largura = $("#largura").val().replace(/,/g,'.');
+			var altura = $("#altura").val().replace(/,/g,'.');
+			var metros = largura * altura * $("#medida").val();
+			$("#quantidade").val(metros);
+		});
+		
+		$("#servico").autocomplete({
             source: "<?php echo base_url(); ?>index.php/os/autoCompleteServico",
             minLength: 2,
             select: function(event, ui) {
@@ -775,7 +802,7 @@
                     });
                 } else {
                     var dados = $(form).serialize();
-                    $("#divProdutos").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
+				    $("#divProdutos").html("<div class='progress progress-info progress-striped active'><div class='bar' style='width: 100%'></div></div>");
                     $.ajax({
                         type: "POST",
                         url: "<?php echo base_url(); ?>index.php/os/adicionarProduto",
